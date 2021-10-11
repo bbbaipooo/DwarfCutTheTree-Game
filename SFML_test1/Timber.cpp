@@ -56,11 +56,34 @@ int main()
 	}
 	Sprite hamburgerSprite;
 	hamburgerSprite.setTexture(hamburgerTexture);
-	//hamburgerTexture.setPosition(0, 800);
-
+	hamburgerSprite.setPosition(0, 900);
+	bool hamburgerActive = false;
+	float hamburgerSpeed = 0.0f;
 
 	//////hotdog//////
-	// 
+	Texture hotdogTexture;
+	if (!hotdogTexture.loadFromFile("graphics/hotdog.png"))
+	{
+		std::cout << "Load Failed";
+	}
+	Sprite hotdogSprite;
+	hotdogSprite.setTexture(hotdogTexture);
+	hotdogSprite.setPosition(0, 1000);
+	bool hotdogActive = false;
+	float hotdogSpeed = 0.0f;
+
+	//////pizza//////
+	Texture pizzaTexture;
+	if (!pizzaTexture.loadFromFile("graphics/pizza.png"))
+	{
+		std::cout << "Load Failed";
+	}
+	Sprite pizzaSprite;
+	pizzaSprite.setTexture(pizzaTexture);
+	pizzaSprite.setPosition(0, 1000);
+	bool pizzaActive = false;
+	float pizzaSpeed = 0.0f;
+
 	//////Jam//////
 	Texture jamTexture;
 	if (!jamTexture.loadFromFile("graphics/jam.png"))
@@ -119,8 +142,8 @@ int main()
 
 			//sandwich high
 			srand((int)time(0) * 10);
-			float height = (rand() % 500) + 500; // random between 499-999
-			sandwichSprite.setPosition(2000, height);
+			float height = (rand() % 420) + 420; // random between 419-839
+			sandwichSprite.setPosition(1950, height);
 			sandwichActive = true;
 		}
 		else
@@ -135,6 +158,84 @@ int main()
 			if (sandwichSprite.getPosition().x < -90) //sandwich wide pixel = 90
 			{
 				sandwichActive = false;
+			}
+		}
+
+		// Manage Hamburger
+		if (!hamburgerActive)
+		{
+			srand((int)time(0) * 250);
+			hamburgerSpeed = (rand() % 200) + 200;
+
+			srand((int)time(0) * 20);
+			float height = (rand() % 490) + 490; 
+			hamburgerSprite.setPosition(2200, height);
+			hamburgerActive = true;
+		}
+		else
+		{
+			//Move Hamburger
+			hamburgerSprite.setPosition(
+				hamburgerSprite.getPosition().x -
+				(hamburgerSpeed * dt.asSeconds()), 
+				hamburgerSprite.getPosition().y);
+
+			//Hamburger out of screen?
+			if (hamburgerSprite.getPosition().x < -68) //hamburger wide pixel = 68
+			{
+				hamburgerActive = false;
+			}
+		}
+
+		// Manage Hotdog
+		if (!hotdogActive)
+		{
+			srand((int)time(0) * 300);
+			hotdogSpeed = (rand() % 200) + 200;
+
+			srand((int)time(0) * 30);
+			float height = (rand() % 560) + 560;
+			hotdogSprite.setPosition(2400, height);
+			hotdogActive = true;
+		}
+		else
+		{
+			//Move Hotdog
+			hotdogSprite.setPosition(
+				hotdogSprite.getPosition().x -
+				(hotdogSpeed * dt.asSeconds()),
+				hotdogSprite.getPosition().y);
+
+			//Hotdog out of screen?
+			if (hotdogSprite.getPosition().x < -88) //hotdog wide pixel = 88
+			{
+				hotdogActive = false;
+			}
+		}
+
+		// Manage Pizza
+		if (!pizzaActive)
+		{
+			srand((int)time(0) * 350);
+			pizzaSpeed = (rand() % 200) + 200;
+
+			srand((int)time(0) * 40);
+			float height = (rand() % 470) + 470;
+			pizzaSprite.setPosition(2600, height);
+			pizzaActive = true;
+		}
+		else
+		{
+			//Move Pizza
+			pizzaSprite.setPosition(
+				pizzaSprite.getPosition().x -
+				(pizzaSpeed * dt.asSeconds()),
+				pizzaSprite.getPosition().y);
+
+			//Pizza out of screen?
+			if (pizzaSprite.getPosition().x < -85) //pizza wide pixel = 85
+			{
+				pizzaActive = false;
 			}
 		}
 
@@ -236,7 +337,11 @@ int main()
 		window.draw(sandwichSprite);//หรือจะวางไว้ข้างหน้าtreeก้ได้เพราะมันจะทำให้เวลาเรามองกิ่งไม้แล้วไขว้เขว
 		//Draw Hamburger
 		window.draw(hamburgerSprite);
-		
+		//Draw Hotdog
+		window.draw(hotdogSprite);
+		//Draw Pizza
+		window.draw(pizzaSprite);
+
 
 		// Show everything I just draw
 		window.display();
