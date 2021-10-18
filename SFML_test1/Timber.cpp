@@ -163,7 +163,7 @@ int main()
 		*/
 		if (!stopGame)
 		{
-			score++;
+			//score++;
 			// Measure time
 			Time dt = timer.restart(); /*-restart timer every frame
 				 dt mean delta time		 -know time how long every frame take
