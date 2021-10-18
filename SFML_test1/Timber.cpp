@@ -109,11 +109,11 @@ int main()
 	//for control time
 	Clock timer; // Clock=class , timer=object
 
-	while (window.isOpen()) 
+	while (window.isOpen())
 	{
 		/*
 		*********************************************
-		          Handle the players input
+				  Handle the players input
 		*********************************************
 		*/
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -121,8 +121,8 @@ int main()
 			window.close();
 		}
 		/*
-		********************************************* 
-		              Update the scene
+		*********************************************
+					  Update the scene
 		*********************************************
 		*/
 
@@ -133,7 +133,7 @@ int main()
 									[.restart() = function of Clock]
 									*/
 
-		// Manage Sandwich
+									// Manage Sandwich
 		if (!sandwichActive)
 		{
 			//sandwich speed
@@ -150,8 +150,8 @@ int main()
 		{
 			//Move sandwich
 			sandwichSprite.setPosition(
-				sandwichSprite.getPosition().x-
-				(sandwichSpeed*dt.asSeconds()), //appoxe 1 second run 5000 frames so dt=0.0002,sandwichSpeed max=399
+				sandwichSprite.getPosition().x -
+				(sandwichSpeed * dt.asSeconds()), //appoxe 1 second run 5000 frames so dt=0.0002,sandwichSpeed max=399
 				sandwichSprite.getPosition().y);
 
 			//Sandwich out of screen?
@@ -168,7 +168,7 @@ int main()
 			hamburgerSpeed = (rand() % 200) + 200;
 
 			srand((int)time(0) * 20);
-			float height = (rand() % 490) + 490; 
+			float height = (rand() % 490) + 490;
 			hamburgerSprite.setPosition(2200, height);
 			hamburgerActive = true;
 		}
@@ -177,7 +177,7 @@ int main()
 			//Move Hamburger
 			hamburgerSprite.setPosition(
 				hamburgerSprite.getPosition().x -
-				(hamburgerSpeed * dt.asSeconds()), 
+				(hamburgerSpeed * dt.asSeconds()),
 				hamburgerSprite.getPosition().y);
 
 			//Hamburger out of screen?
@@ -194,7 +194,7 @@ int main()
 			hotdogSpeed = (rand() % 200) + 200;
 
 			srand((int)time(0) * 30);
-			float height = (rand() % 560) + 560;
+			float height = (rand() % 540) + 540;
 			hotdogSprite.setPosition(2400, height);
 			hotdogActive = true;
 		}
@@ -247,15 +247,15 @@ int main()
 
 			srand((int)time(0) * 10);
 			float height = (rand() % 150);
-			jamSprite1.setPosition(-250, height+100); //jam wide pixel = 250
+			jamSprite1.setPosition(-250, height + 100); //jam wide pixel = 250
 			jamActive1 = true;
 		}
 		else
 		{
 			//Move Jam1
 			jamSprite1.setPosition(
-				jamSprite1.getPosition().x + 
-				(jamSpeed1 * dt.asSeconds()), 
+				jamSprite1.getPosition().x +
+				(jamSpeed1 * dt.asSeconds()),
 				jamSprite1.getPosition().y);
 
 			//Jam1 out of screen?
@@ -272,8 +272,8 @@ int main()
 			jamSpeed2 = (rand() % 200);
 
 			srand((int)time(0) * 20);
-			float height = (rand() % 300)-150;
-			jamSprite2.setPosition(-250, height+125); //jam wide pixel = 250
+			float height = (rand() % 300) - 150;
+			jamSprite2.setPosition(-250, height + 125); //jam wide pixel = 250
 			jamActive2 = true;
 		}
 		else
@@ -298,8 +298,8 @@ int main()
 			jamSpeed3 = (rand() % 200);
 
 			srand((int)time(0) * 30);
-			float height = (rand() % 450)-150;
-			jamSprite3.setPosition(-250, height+150); //jam wide pixel = 250
+			float height = (rand() % 450) - 150;
+			jamSprite3.setPosition(-250, height + 150); //jam wide pixel = 250
 			jamActive3 = true;
 		}
 		else
@@ -318,7 +318,7 @@ int main()
 		}
 		/*
 		*********************************************
-		               Draw the scene
+					   Draw the scene
 		*********************************************
 		*/
 		//// Clear everything from the last frame
@@ -350,4 +350,5 @@ int main()
 
 
 	return 0;
+
 }
