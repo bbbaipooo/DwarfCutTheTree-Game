@@ -123,14 +123,14 @@ int main()
 	messageText.setFont(font);
 	scoreText.setFont(font);
 
-	messageText.setString("PRESS ENTER TO START THE GAME!!!"); //assign
-	scoreText.setString("SCORE = 0");
+	messageText.setString("   PRESS ENTER TO \nSTART THE GAME ! ! !"); //assign
+	scoreText.setString("SCORE   0");
 
-	messageText.setCharacterSize(75);
-	scoreText.setCharacterSize(100);
+	messageText.setCharacterSize(90);
+	scoreText.setCharacterSize(85);
 
 	messageText.setFillColor(Color::White);
-	scoreText.setFillColor(Color::White);
+	scoreText.setFillColor(Color::Black);
 
 	//Position the text
 	FloatRect textBound = messageText.getLocalBounds();
@@ -163,6 +163,7 @@ int main()
 		*/
 		if (!stopGame)
 		{
+			score++;
 			// Measure time
 			Time dt = timer.restart(); /*-restart timer every frame
 				 dt mean delta time		 -know time how long every frame take
@@ -231,7 +232,7 @@ int main()
 				hotdogSpeed = (rand() % 200) + 200;
 
 				srand((int)time(0) * 30);
-				float height = (rand() % 540) + 540;
+				float height = (rand() % 520) + 520;
 				hotdogSprite.setPosition(2400, height);
 				hotdogActive = true;
 			}
@@ -356,7 +357,7 @@ int main()
 
 			//Update score text to show on display
 			std::stringstream ss;
-			ss << "SCORE = " << score;
+			ss << "SCORE   " << score;
 			scoreText.setString(ss.str());
 
 		} //END of Function[if(!stopGame)]
