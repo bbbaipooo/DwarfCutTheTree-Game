@@ -110,6 +110,18 @@ int main()
 	//for control time
 	Clock timer; // Clock=class , timer=object
 
+	//Time bar
+	RectangleShape timeBar;
+	float timeBarStartWidth = 500;
+	float timeBarHeight = 80;
+	timeBar.setSize(Vector2f(timeBarStartWidth, timeBarHeight));
+	timeBar.setFillColor(Color::Red);
+	timeBar.setPosition((1920 / 2) - timeBarStartWidth / 2, 980);
+
+	Time gameTimeTotal;
+	float timeRemaining = 6.0f;
+	float timeBarWidthPerSecond = timeBarStartWidth / timeRemaining;
+
 	bool stopGame = true;
 
 	//Draw Text on Display
@@ -155,6 +167,10 @@ int main()
 		if (Keyboard::isKeyPressed(Keyboard::Return))
 		{
 			stopGame = false;
+
+			//Reset Time & Score
+			score = 0;
+			timeRemaining = 5;
 		}
 		/*
 		*********************************************
@@ -171,7 +187,28 @@ int main()
 										[.restart() = function of Clock]
 										*/
 
-										// Manage Sandwich
+			// minus from the amount of time remaining
+			timeRemaining -= dt.asSeconds();
+			// update size the time bar
+			timeBar.setSize(Vector2f(timeBarWidthPerSecond* timeRemaining, 
+										timeBarHeight));
+
+			if (timeRemaining <= 0.0f)
+			{
+				//stop the game
+				stopGame = true;
+
+				//Change message to show player
+				messageText.setString("GAME OVER ! ! !");
+
+				//Reposition the text based on its new size same the first before start game
+				FloatRect textRect = messageText.getLocalBounds();
+				messageText.setOrigin(textRect.left + textRect.width / 2.0f, 
+										textRect.top + textRect.height / 2.0f);
+				messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
+			}
+
+			// Manage Sandwich
 			if (!sandwichActive)
 			{
 				//sandwich speed
@@ -386,6 +423,8 @@ int main()
 		window.draw(hotdogSprite);
 		//Draw Pizza
 		window.draw(pizzaSprite);
+		//Draw TimeBar
+		window.draw(timeBar);
 		//Draw the score
 		window.draw(scoreText);
 		//draw the massege
