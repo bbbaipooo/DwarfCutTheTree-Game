@@ -15,7 +15,7 @@ int main()
 	// create & show a window for the game
 	RenderWindow window(size, "DwarfCutTheTree!!!", Style::Fullscreen);
 
-	//////Background//////
+	//////Background Game Start//////
 	//Texture
 	Texture backgroundTexture;
 	if (!backgroundTexture.loadFromFile("graphics/Background2.jpg"))
