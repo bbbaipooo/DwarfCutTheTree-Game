@@ -36,7 +36,7 @@ int main()
 
 	//Texture
 	Texture background2Texture;
-	if (!background2Texture.loadFromFile("graphics/Forest1.jpg"))
+	if (!background2Texture.loadFromFile("graphics/Forest1.jpg")) 
 	{
 		std::cout << "Load Failed";
 	}
