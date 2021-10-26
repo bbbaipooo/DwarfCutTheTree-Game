@@ -7,6 +7,13 @@
 // when create class จะถูกเก็บในนี้ //using namespace for make code easier
 using namespace sf;
 
+void updateBranches(int seed);
+const int amountBranches = 6;
+Sprite branches[amountBranches];
+//Player / Branch = LEFT / RIGHT??
+enum class side { LEFT, RIGHT, NONE };
+side branchPositions[amountBranches];
+
 int main()
 {
 	// create video mode
@@ -26,6 +33,17 @@ int main()
 	Sprite backgroundSprite;
 	backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setPosition(0, 0); //set to cover the screen
+
+	//Texture
+	Texture background2Texture;
+	if (!background2Texture.loadFromFile("graphics/Forest1.jpg"))
+	{
+		std::cout << "Load Failed";
+	}
+	// Sprite
+	Sprite background2Sprite;
+	background2Sprite.setTexture(background2Texture);
+	background2Sprite.setPosition(0, 0); //set to cover the screen
 
 	//////Tree//////
 	Texture treeTexture;
@@ -150,6 +168,24 @@ int main()
 						  textBound.top + textBound.height / 2.0f);
 	messageText.setPosition(1920/2.0f,1080/2.0f);
 	scoreText.setPosition(20,20);
+
+	// 6 Branches
+	Texture branchTexture;
+	branchTexture.loadFromFile("graphics/branch1.png");
+	for (int i = 0; i < amountBranches; i++)
+	{
+		branches[i].setTexture(branchTexture);
+		branches[i].setPosition(-2000,-2000);
+		// Set the Sprite's origin to dead center
+		// Wecan then spin it round without changing its position
+		branches[i].setOrigin(220,20);
+	}
+
+	updateBranches(1);
+	updateBranches(2);
+	updateBranches(3);
+	updateBranches(4);
+	updateBranches(5);
 
 	while (window.isOpen())
 	{
@@ -397,6 +433,29 @@ int main()
 			ss << "SCORE   " << score;
 			scoreText.setString(ss.str());
 
+			//Update brancgh Sprites
+			for (int i = 0; i < amountBranches; i++)
+			{
+				float height = i * 150;
+				if (branchPositions[i] == side::LEFT)
+				{
+					//move to left side
+					branches[i].setPosition(610, height);
+					//flip sprite from original photo
+					branches[i].setRotation(180);
+				}
+				else if (branchPositions[i] == side::RIGHT)
+				{
+					branches[i].setPosition(1330, height);
+					branches[i].setRotation(0);
+				}
+				else
+				{
+					//hide branch
+					branches[i].setPosition(3000, height);
+				}
+			}
+
 		} //END of Function[if(!stopGame)]
 		/*
 		*********************************************
@@ -413,6 +472,11 @@ int main()
 		window.draw(jamSprite1);
 		window.draw(jamSprite2);
 		window.draw(jamSprite3);
+		//Draw Branches
+		for (int i = 0; i < amountBranches; i++)
+		{
+			window.draw(branches[i]);
+		}
 		//Draw Tree
 		window.draw(treeSprite);
 		//Draw Sandwich (draw after tree = drifting either infront or behind tree)
@@ -430,6 +494,7 @@ int main()
 		//draw the massege
 		if (stopGame)
 		{
+			window.draw(background2Sprite);
 			window.draw(messageText);
 		}
 
@@ -439,7 +504,33 @@ int main()
 
 	}
 
-
 	return 0;
 
+}
+
+void updateBranches(int seed)
+{
+	//move all branches down one place
+	for (int j = amountBranches - 1; j > 0; j--)
+	{
+		branchPositions[j] = branchPositions[j - 1];
+	}
+	//born a new branch at position 0
+	//LEFT / RIGHT / NONE
+	srand((int)time(0) + seed);
+	int r = (rand() % 5);
+	switch (r)
+	{
+	case 0:
+		branchPositions[0] = side::LEFT;
+		break;
+
+	case 1:
+		branchPositions[0] = side::RIGHT;
+		break;
+
+	default:
+		branchPositions[0] = side::NONE;
+		break;
+	}
 }
