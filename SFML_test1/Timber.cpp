@@ -181,11 +181,48 @@ int main()
 		branches[i].setOrigin(220,20);
 	}
 
-	updateBranches(1);
-	updateBranches(2);
-	updateBranches(3);
-	updateBranches(4);
-	updateBranches(5);
+	// Player
+	Texture playerTexture;
+	playerTexture.loadFromFile("graphics/dwarf.png");
+	Sprite playerSprite;
+	playerSprite.setTexture(playerTexture);
+	playerSprite.setPosition(580,720);
+
+	// player start on the left
+	side playerSide = side::LEFT;
+
+	// RIP rock
+	Texture RIPTexture;
+	RIPTexture.loadFromFile("graphics/RIP.png");
+	Sprite RIPSprite;
+	RIPSprite.setTexture(RIPTexture);
+	RIPSprite.setPosition(600, 860);
+
+	// axe
+	Texture axeTexture;
+	axeTexture.loadFromFile("graphics/axe.png");
+	Sprite axeSprite;
+	axeSprite.setTexture(axeTexture);
+	axeSprite.setPosition(700, 830);
+	
+	// Line the axe up with the tree
+	const float AXE_POSITION_LEFT = 700;
+	const float AXE_POSITION_RIGHT = 1075;
+
+	// Log that be cut
+	Texture logTexture;
+	logTexture.loadFromFile("graphics/log.png");
+	Sprite logSprite;
+	logSprite.setTexture(logTexture);
+	logSprite.setPosition(810, 720);
+
+	//log variable
+	bool logActive = false;
+	float logSpeedX = 1000;
+	float logSpeedY = -1500;
+
+	// Control the player input
+	bool acceptInput = false;
 
 	while (window.isOpen())
 	{
@@ -194,6 +231,20 @@ int main()
 				  Handle the players input
 		*********************************************
 		*/
+
+		Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::KeyReleased && !stopGame)
+			{
+				//Listen for key presses again
+				acceptInput = true;
+
+				//hide the axe
+				axeSprite.setPosition(2000, axeSprite.getPosition().y);
+			}
+		}
+
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			window.close();
@@ -207,7 +258,77 @@ int main()
 			//Reset Time & Score
 			score = 0;
 			timeRemaining = 5;
+
+			//Make all the branches disappear
+			for (int i = 1; i < amountBranches; i++)
+			{
+				branchPositions[i] = side::NONE;
+			}
+
+			//Make sure the gravestone is hidden
+			RIPSprite.setPosition(675, 2000);
+
+			//Move the player into position
+			playerSprite.setPosition(580, 720);
+			acceptInput = true;
+
 		}
+
+		//Wrap the player controls to
+		//Make sure we are accepting input
+		if (acceptInput)
+		{
+			//First handle pressing the right cursor key
+			if (Keyboard::isKeyPressed(Keyboard::Right))
+			{
+				//Make sure the player is on the right
+				playerSide = side::RIGHT;
+				score++;
+
+				//Add to the amount of time remaining
+				timeRemaining += (2 / score) + .15;
+
+				axeSprite.setPosition(AXE_POSITION_RIGHT, axeSprite.getPosition().y);
+
+				playerSprite.setPosition(1200, 720);
+
+				//update the branches
+				updateBranches(score);//random on the top of the tree
+
+				//set the log that be cut to the left
+				logSprite.setPosition(810, 720);
+				logSpeedX = -5000;
+				logActive = true;
+
+				acceptInput = false;
+			}
+			//Handle the lest cursor  key
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Left))
+		{
+			//Make sure the player is on the right
+			playerSide = side::LEFT;
+			score++;
+
+			//Add to the amount of time remaining
+			timeRemaining += (2 / score) + .15;
+
+			axeSprite.setPosition(AXE_POSITION_LEFT, axeSprite.getPosition().y);
+
+			playerSprite.setPosition(580, 720);
+
+			//update the branches
+			updateBranches(score);//random on the top of the tree
+
+			//set the log that be cut to the left
+			logSprite.setPosition(810, 720);
+			logSpeedX =  5000;
+			logActive = true;
+
+			acceptInput = false;
+		}
+		
 		/*
 		*********************************************
 					  Update the scene
@@ -433,7 +554,7 @@ int main()
 			ss << "SCORE   " << score;
 			scoreText.setString(ss.str());
 
-			//Update brancgh Sprites
+			//Update branch Sprites
 			for (int i = 0; i < amountBranches; i++)
 			{
 				float height = i * 150;
@@ -453,6 +574,22 @@ int main()
 				{
 					//hide branch
 					branches[i].setPosition(3000, height);
+				}
+			}
+
+			//Handle log that be cut
+			if (logActive)
+			{
+				logSprite.setPosition(logSprite.getPosition().x + (logSpeedX * dt.asSeconds()),
+					                  logSprite.getPosition().y + (logSpeedY * dt.asSeconds()));
+
+				//Has the log reached the right hand edge?
+				if (logSprite.getPosition().x < -100 ||
+					logSprite.getPosition().x>2000)
+				{
+					//Set it up ready to be a whole new log next frame
+					logActive = false;
+					logSprite.setPosition(810, 720);
 				}
 			}
 
@@ -479,6 +616,14 @@ int main()
 		}
 		//Draw Tree
 		window.draw(treeSprite);
+		//Draw the player
+		window.draw(playerSprite);
+		//Draw the axe
+		window.draw(axeSprite);
+		//Draw the log that be cut
+		window.draw(logSprite);
+		//Draw the RIPStone
+		window.draw(RIPSprite);
 		//Draw Sandwich (draw after tree = drifting either infront or behind tree)
 		window.draw(sandwichSprite);//หรือจะวางไว้ข้างหน้าtreeก้ได้เพราะมันจะทำให้เวลาเรามองกิ่งไม้แล้วไขว้เขว
 		//Draw Hamburger
