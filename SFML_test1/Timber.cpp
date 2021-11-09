@@ -391,7 +391,7 @@ int main()
 				stopGame = true;
 
 				//Change message to show player
-				messageText.setString("GAME OVER ! ! !");
+				messageText.setString("TIME'S UP ! ! !");
 
 				//Reposition the text based on its new size same the first before start game
 				FloatRect textRect = messageText.getLocalBounds();
@@ -645,7 +645,7 @@ int main()
 				playerSprite.setPosition(3000, 1000);
 
 				//change the text of the message
-				messageText.setString("ATTACK WITH BRANCH ! !");
+				messageText.setString("OH NO YOUR ATTACK ! !");
 
 				//Center it on sth screen
 				FloatRect textRect = messageText.getLocalBounds();
