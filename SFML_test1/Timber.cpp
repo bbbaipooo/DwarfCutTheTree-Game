@@ -3,6 +3,7 @@
 #include<SFML/Graphics.hpp> //include SFML graphics from the folder
 #include<iostream>
 #include<sstream> //power string
+#include<SFML/Audio.hpp>
 
 // when create class จะถูกเก็บในนี้ //using namespace for make code easier
 using namespace sf;
@@ -224,6 +225,22 @@ int main()
 	// Control the player input
 	bool acceptInput = false;
 
+	// Sound
+	SoundBuffer chopBuffer;
+	chopBuffer.loadFromFile("sound/chop.wav");
+	Sound chop;
+	chop.setBuffer(chopBuffer);
+
+	SoundBuffer deathBuffer;
+	deathBuffer.loadFromFile("sound/death.wav");
+	Sound death;
+	death.setBuffer(deathBuffer);
+
+	SoundBuffer ootBuffer;
+	ootBuffer.loadFromFile("sound/out_of_time.wav");
+	Sound outOfTime;
+	outOfTime.setBuffer(ootBuffer);
+
 	while (window.isOpen())
 	{
 		/*
@@ -278,55 +295,73 @@ int main()
 		//Make sure we are accepting input
 		if (acceptInput)
 		{
-			//First handle pressing the right cursor key
+			// More code here next...
+			// First handle pressing the right cursor key
 			if (Keyboard::isKeyPressed(Keyboard::Right))
 			{
-				//Make sure the player is on the right
+				// Make sure the player is on the right
 				playerSide = side::RIGHT;
+
 				score++;
 
-				//Add to the amount of time remaining
+				// Add to the amount of time remaining
 				timeRemaining += (2 / score) + .15;
 
-				axeSprite.setPosition(AXE_POSITION_RIGHT, axeSprite.getPosition().y);
+				axeSprite.setPosition(AXE_POSITION_RIGHT,
+					axeSprite.getPosition().y);
+
+
 
 				playerSprite.setPosition(1200, 720);
 
-				//update the branches
-				updateBranches(score);//random on the top of the tree
+				// update the branches
+				updateBranches(score);
 
-				//set the log that be cut to the left
+				// set the log flying to the left
 				logSprite.setPosition(810, 720);
 				logSpeedX = -5000;
 				logActive = true;
 
+
 				acceptInput = false;
+
+				// Play a chop sound
+				chop.play();
+
 			}
-			//Handle the lest cursor  key
-		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Left))
-		{
-			//Make sure the player is on the right
-			playerSide = side::LEFT;
-			score++;
+			// Handle the left cursor key
+			if (Keyboard::isKeyPressed(Keyboard::Left))
+			{
+				// Make sure the player is on the left
+				playerSide = side::LEFT;
 
-			//Add to the amount of time remaining
-			timeRemaining += (2 / score) + .15;
+				score++;
 
-			axeSprite.setPosition(AXE_POSITION_LEFT, axeSprite.getPosition().y);
+				// Add to the amount of time remaining
+				timeRemaining += (2 / score) + .15;
 
-			playerSprite.setPosition(580, 720);
+				axeSprite.setPosition(AXE_POSITION_LEFT,
+					axeSprite.getPosition().y);
 
-			//update the branches
-			updateBranches(score);//random on the top of the tree
 
-			//set the log that be cut to the left
-			logSprite.setPosition(810, 720);
-			logSpeedX =  5000;
-			logActive = true;
+				playerSprite.setPosition(580, 720);
 
-			acceptInput = false;
+				// update the branches
+				updateBranches(score);
+
+				// set the log flying
+				logSprite.setPosition(810, 720);
+				logSpeedX = 5000;
+				logActive = true;
+
+
+				acceptInput = false;
+
+				// Play a chop sound
+				chop.play();
+
+			}
 		}
 		
 		/*
@@ -593,6 +628,31 @@ int main()
 				}
 			}
 
+			//Has the player been squished by a branch?
+			if (branchPositions[5] == playerSide)
+			{
+				//deadth
+				stopGame = true;
+				acceptInput = false;
+
+				//Draw the Gravestone
+				RIPSprite.setPosition(525, 760);
+
+				//hide the player 
+				playerSprite.setPosition(2000, 660);
+
+				//change the text of the message
+				messageText.setString("ATTACK WITH BRANCH ! !");
+
+				//Center it on sth screen
+				FloatRect textRect = messageText.getLocalBounds();
+
+				messageText.setOrigin(textRect.left + textRect.width / 2.0f,
+					textRect.top + textRect.height / 2.0f);
+
+				messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
+			}
+
 		} //END of Function[if(!stopGame)]
 		/*
 		*********************************************
@@ -622,8 +682,6 @@ int main()
 		window.draw(axeSprite);
 		//Draw the log that be cut
 		window.draw(logSprite);
-		//Draw the RIPStone
-		window.draw(RIPSprite);
 		//Draw Sandwich (draw after tree = drifting either infront or behind tree)
 		window.draw(sandwichSprite);//หรือจะวางไว้ข้างหน้าtreeก้ได้เพราะมันจะทำให้เวลาเรามองกิ่งไม้แล้วไขว้เขว
 		//Draw Hamburger
@@ -641,6 +699,8 @@ int main()
 		{
 			window.draw(background2Sprite);
 			window.draw(messageText);
+			////Draw the RIPStone
+			//window.draw(RIPSprite);
 		}
 
 
