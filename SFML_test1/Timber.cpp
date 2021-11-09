@@ -317,7 +317,7 @@ int main()
 				// update the branches
 				updateBranches(score);
 
-				// set the log flying to the left
+				// set the log that be cut
 				logSprite.setPosition(810, 720);
 				logSpeedX = -5000;
 				logActive = true;
@@ -325,7 +325,7 @@ int main()
 
 				acceptInput = false;
 
-				// Play a chop sound
+				// sound chop
 				chop.play();
 
 			}
@@ -350,7 +350,7 @@ int main()
 				// update the branches
 				updateBranches(score);
 
-				// set the log flying
+				// set the log that be cut
 				logSprite.setPosition(810, 720);
 				logSpeedX = 5000;
 				logActive = true;
@@ -358,7 +358,7 @@ int main()
 
 				acceptInput = false;
 
-				// Play a chop sound
+				// sound chop
 				chop.play();
 
 			}
@@ -398,6 +398,9 @@ int main()
 				messageText.setOrigin(textRect.left + textRect.width / 2.0f, 
 										textRect.top + textRect.height / 2.0f);
 				messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
+
+				//sound the out of time
+				outOfTime.play();
 			}
 
 			// Manage Sandwich
@@ -639,7 +642,7 @@ int main()
 				RIPSprite.setPosition(525, 760);
 
 				//hide the player 
-				playerSprite.setPosition(2000, 660);
+				playerSprite.setPosition(3000, 1000);
 
 				//change the text of the message
 				messageText.setString("ATTACK WITH BRANCH ! !");
@@ -651,6 +654,9 @@ int main()
 					textRect.top + textRect.height / 2.0f);
 
 				messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
+
+				//sound deadth
+				death.play();
 			}
 
 		} //END of Function[if(!stopGame)]
