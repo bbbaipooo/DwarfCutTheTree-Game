@@ -382,7 +382,7 @@ int main()
 			// minus from the amount of time remaining
 			timeRemaining -= dt.asSeconds();
 			// update size the time bar
-			timeBar.setSize(Vector2f(timeBarWidthPerSecond* timeRemaining, 
+			timeBar.setSize(Vector2f(timeBarWidthPerSecond* timeRemaining , 
 										timeBarHeight));
 
 			if (timeRemaining <= 0.0f)
@@ -645,7 +645,7 @@ int main()
 				playerSprite.setPosition(3000, 1000);
 
 				//change the text of the message
-				messageText.setString("OH NO YOUR ATTACK ! !");
+				messageText.setString("       OH NO ! !\n YOUR ATTACK ");
 
 				//Center it on sth screen
 				FloatRect textRect = messageText.getLocalBounds();
