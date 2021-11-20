@@ -237,6 +237,11 @@ int main()
 	Sound outOfTime;
 	outOfTime.setBuffer(ootBuffer);
 
+	SoundBuffer pressBuffer;
+	pressBuffer.loadFromFile("sound/press.wav");
+	Sound press;
+	press.setBuffer(pressBuffer);
+
 	
 	string playerName;
 	Text nameText;
@@ -347,6 +352,7 @@ Game:
 
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
+			press.play();
 			window.close();
 		}
 
@@ -371,6 +377,7 @@ Game:
 			//Move the player into position
 			playerSprite.setPosition(580, 720);
 			acceptInput = true;
+
 
 		}
 
@@ -409,7 +416,7 @@ Game:
 				acceptInput = false;
 
 				// sound chop
-				chop.play();
+				chop.play(); 
 
 			}
 
@@ -744,16 +751,19 @@ Game:
 		{
 			if (Keyboard::isKeyPressed(Keyboard::F9))
 			{
+				press.play();
 				saveScoreFile(playerName, score);
 				goto menu_score;
 			}
 			else if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
+				press.play();
 				window.close();
 			}
 			nameText.setString(playerName + "_");
 			nameText.setOrigin(Vector2f(nameText.getGlobalBounds().width, nameText.getGlobalBounds().height) / 2.f);
 			nameText.setPosition(nameTextPos);
+			
 	
 		}
 		/*
@@ -802,8 +812,6 @@ Game:
 			window.draw(background2Sprite);
 			window.draw(messageText);
 			window.draw(nameText);
-			////Draw the RIPStone
-			//window.draw(RIPSprite);
 		}
 
 
@@ -813,7 +821,7 @@ Game:
 	}
 
 menu_score:
-
+	
 	readScoreFile();
 	for (int i = 0; i < TOPSCORE; i++)
 	{
@@ -829,10 +837,12 @@ menu_score:
 			{
 				if (event.key.code == Keyboard::Escape)
 				{
+					press.play();
 					window.close();
 				}
 				if (event.key.code == Keyboard::G)
 				{
+					press.play();
 					goto Game;
 				}
 			}
