@@ -4,9 +4,18 @@
 #include<iostream>
 #include<sstream> //power string
 #include<SFML/Audio.hpp>
+#include <string>
+#include <fstream>
+#define TOPSCORE 5
+#define FILENAME "score.txt"
 
 // when create class จะถูกเก็บในนี้ //using namespace for make code easier
 using namespace sf;
+using namespace std;
+
+void saveScoreFile(string name, int score);
+void readScoreFile();
+void updateBranches(int seed);
 
 void updateBranches(int seed);
 const int amountBranches = 6;
@@ -15,16 +24,29 @@ Sprite branches[amountBranches];
 enum class side { LEFT, RIGHT, NONE };
 side branchPositions[amountBranches];
 
+struct ScoreData
+{
+	string name;
+	int score;
+};
+ScoreData scoreData[TOPSCORE + 1];
+
 int main()
 {
 	// create video mode
 	VideoMode size(1920, 1080);
-
 	// create & show a window for the game
 	RenderWindow window(size, "DwarfCutTheTree!!!", Style::Fullscreen);
 
+	readScoreFile();
+
+	//++++++++++++ initialize Game++++++++++++
 	//////Background Game Start//////
 	//Texture
+
+	bool stopGame = true;
+	bool acceptInput = false;  // Control the player input
+
 	Texture backgroundTexture;
 	if (!backgroundTexture.loadFromFile("graphics/Background2.jpg"))
 	{
@@ -34,6 +56,7 @@ int main()
 	Sprite backgroundSprite;
 	backgroundSprite.setTexture(backgroundTexture);
 	backgroundSprite.setPosition(0, 0); //set to cover the screen
+
 
 	//Texture
 	Texture background2Texture;
@@ -64,7 +87,6 @@ int main()
 	}
 	Sprite sandwichSprite;
 	sandwichSprite.setTexture(sandwichTexture);
-	sandwichSprite.setPosition(-90, 800);
 	bool sandwichActive = false; //sandwich on sceen now?
 	float sandwichSpeed = 0.0f; //How fast is sandwich?
 
@@ -76,7 +98,6 @@ int main()
 	}
 	Sprite hamburgerSprite;
 	hamburgerSprite.setTexture(hamburgerTexture);
-	hamburgerSprite.setPosition(-68, 900);
 	bool hamburgerActive = false;
 	float hamburgerSpeed = 0.0f;
 
@@ -88,7 +109,6 @@ int main()
 	}
 	Sprite hotdogSprite;
 	hotdogSprite.setTexture(hotdogTexture);
-	hotdogSprite.setPosition(-88, 1000);
 	bool hotdogActive = false;
 	float hotdogSpeed = 0.0f;
 
@@ -100,11 +120,10 @@ int main()
 	}
 	Sprite pizzaSprite;
 	pizzaSprite.setTexture(pizzaTexture);
-	pizzaSprite.setPosition(-85, 1000);
 	bool pizzaActive = false;
 	float pizzaSpeed = 0.0f;
 
-	//////Jam//////
+	//////......................Jam.................//////
 	Texture jamTexture;
 	if (!jamTexture.loadFromFile("graphics/jam.png"))
 	{
@@ -116,9 +135,6 @@ int main()
 	jamSprite1.setTexture(jamTexture);
 	jamSprite2.setTexture(jamTexture);
 	jamSprite3.setTexture(jamTexture);
-	jamSprite1.setPosition(-250, 20); //position
-	jamSprite2.setPosition(-250, 220);
-	jamSprite3.setPosition(-250, 420);
 	bool jamActive1 = false; //jam on screnn now?
 	bool jamActive2 = false;
 	bool jamActive3 = false;
@@ -129,21 +145,17 @@ int main()
 	//for control time
 	Clock timer; // Clock=class , timer=object
 
-	//Time bar
+	//...............Time bar...................
 	RectangleShape timeBar;
 	float timeBarStartWidth = 500;
 	float timeBarHeight = 80;
 	timeBar.setSize(Vector2f(timeBarStartWidth, timeBarHeight));
 	timeBar.setFillColor(Color::Red);
-	timeBar.setPosition((1920 / 2) - timeBarStartWidth / 2, 980);
-
 	Time gameTimeTotal;
 	float timeRemaining = 6.0f;
 	float timeBarWidthPerSecond = timeBarStartWidth / timeRemaining;
 
-	bool stopGame = true;
-
-	//Draw Text on Display
+	//..........Draw Text on Display............
 	int score = 0;
 	sf::Text messageText;
 	sf::Text scoreText;
@@ -164,11 +176,7 @@ int main()
 	scoreText.setFillColor(Color::Black);
 
 	//Position the text
-	FloatRect textBound = messageText.getLocalBounds();
-	messageText.setOrigin(textBound.left + textBound.width / 2.0f,
-						  textBound.top + textBound.height / 2.0f);
-	messageText.setPosition(1920/2.0f,1080/2.0f);
-	scoreText.setPosition(20,20);
+	FloatRect textBound; 
 
 	// 6 Branches
 	Texture branchTexture;
@@ -176,54 +184,42 @@ int main()
 	for (int i = 0; i < amountBranches; i++)
 	{
 		branches[i].setTexture(branchTexture);
-		branches[i].setPosition(-2000,-2000);
 		// Set the Sprite's origin to dead center
 		// Wecan then spin it round without changing its position
 		branches[i].setOrigin(220,20);
 	}
 
-	// Player
+	//..............Player.............
 	Texture playerTexture;
 	playerTexture.loadFromFile("graphics/dwarf.png");
 	Sprite playerSprite;
 	playerSprite.setTexture(playerTexture);
 	playerSprite.setPosition(580,720);
 
-	// player start on the left
+	//................. player start on the left ..................
 	side playerSide = side::LEFT;
 
-	// RIP rock
-	Texture RIPTexture;
-	RIPTexture.loadFromFile("graphics/RIP.png");
-	Sprite RIPSprite;
-	RIPSprite.setTexture(RIPTexture);
-	RIPSprite.setPosition(600, 860);
-
-	// axe
+	//.................. axe.............
 	Texture axeTexture;
 	axeTexture.loadFromFile("graphics/axe.png");
 	Sprite axeSprite;
 	axeSprite.setTexture(axeTexture);
-	axeSprite.setPosition(700, 830);
 	
-	// Line the axe up with the tree
+	//............... Line the axe up with the tree ..................
 	const float AXE_POSITION_LEFT = 700;
 	const float AXE_POSITION_RIGHT = 1075;
 
-	// Log that be cut
+	//................ Log that be cut ....................
 	Texture logTexture;
 	logTexture.loadFromFile("graphics/log.png");
 	Sprite logSprite;
 	logSprite.setTexture(logTexture);
-	logSprite.setPosition(810, 720);
-
 	//log variable
 	bool logActive = false;
 	float logSpeedX = 1000;
 	float logSpeedY = -1500;
 
-	// Control the player input
-	bool acceptInput = false;
+	
 
 	// Sound
 	SoundBuffer chopBuffer;
@@ -241,6 +237,78 @@ int main()
 	Sound outOfTime;
 	outOfTime.setBuffer(ootBuffer);
 
+	
+	string playerName;
+	Text nameText;
+	nameText.setFont(font);
+	const Vector2f nameTextPos(977, 850);
+	nameText.setOrigin(Vector2f(nameText.getGlobalBounds().width, nameText.getGlobalBounds().height) / 2.f);
+	nameText.setFillColor(Color::Black);
+	nameText.setPosition(nameTextPos);
+	nameText.setCharacterSize(60);
+
+
+//++++++++++++ initialize menu_score ++++++++++++
+	//.....BG.....
+	Texture background3Texture;
+	if (!background3Texture.loadFromFile("graphics/Background4.jpg"))
+	{
+		std::cout << "Load Failed";
+	}
+	// Sprite
+	Sprite background3Sprite;
+	background3Sprite.setTexture(background3Texture);
+	background3Sprite.setPosition(0, 0);
+
+	//....... score .....
+	Text scoreBoardText[TOPSCORE];
+	const Vector2f startPos(645, 300);
+	for (int i = 0; i < TOPSCORE; i++)
+	{
+		scoreBoardText[i].setFont(font);
+		scoreBoardText[i].setCharacterSize(38);
+		scoreBoardText[i].setFillColor(Color::Black);
+		scoreBoardText[i].setPosition(startPos + (Vector2f(0, 110) * (float)i));
+	}
+
+
+Game:
+	
+	sandwichSprite.setPosition(-90, 800);
+
+	hamburgerSprite.setPosition(-68, 900);
+
+	hotdogSprite.setPosition(-88, 1000);
+
+	pizzaSprite.setPosition(-85, 1000);
+
+	jamSprite1.setPosition(-250, 20); //position
+	jamSprite2.setPosition(-250, 220);
+	jamSprite3.setPosition(-250, 420);
+
+	for (int i = 0; i < amountBranches; i++)
+	{
+		branches[i].setPosition(-2000, -2000);
+	}
+
+	timeBar.setPosition((1920 / 2) - timeBarStartWidth / 2, 980);
+
+	textBound = messageText.getLocalBounds();
+	messageText.setOrigin(textBound.left + textBound.width / 2.0f,
+						  textBound.top + textBound.height / 2.0f);
+	messageText.setPosition(1920/2.0f,1000/2.0f);
+	scoreText.setPosition(20,20);
+
+	logSprite.setPosition(810, 720);
+
+	axeSprite.setPosition(700, 830);
+
+
+	// ....... playname ........
+	playerName = "";
+	nameText.setString("_");
+	
+
 	while (window.isOpen())
 	{
 		/*
@@ -256,9 +324,24 @@ int main()
 			{
 				//Listen for key presses again
 				acceptInput = true;
-
 				//hide the axe
 				axeSprite.setPosition(2000, axeSprite.getPosition().y);
+			}
+			if (stopGame)
+			{
+				if (event.type == Event::TextEntered)
+				{
+					switch (event.key.code)
+					{
+					case 8: // DELETE_KEY
+						if (playerName.length() > 0)
+							playerName.pop_back();
+						break;
+					default:
+						playerName += (char)event.key.code;
+						break;
+					}
+				}
 			}
 		}
 
@@ -270,6 +353,8 @@ int main()
 		// Start the game
 		if (Keyboard::isKeyPressed(Keyboard::Return))
 		{
+			playerName = "";
+			nameText.setString("___");
 			stopGame = false;
 
 			//Reset Time & Score
@@ -282,8 +367,6 @@ int main()
 				branchPositions[i] = side::NONE;
 			}
 
-			//Make sure the gravestone is hidden
-			RIPSprite.setPosition(675, 2000);
 
 			//Move the player into position
 			playerSprite.setPosition(580, 720);
@@ -638,9 +721,6 @@ int main()
 				stopGame = true;
 				acceptInput = false;
 
-				//Draw the Gravestone
-				RIPSprite.setPosition(525, 760);
-
 				//hide the player 
 				playerSprite.setPosition(3000, 1000);
 
@@ -653,13 +733,29 @@ int main()
 				messageText.setOrigin(textRect.left + textRect.width / 2.0f,
 					textRect.top + textRect.height / 2.0f);
 
-				messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
+				messageText.setPosition(1920 / 2.0f, 1000 / 2.0f);
 
 				//sound deadth
 				death.play();
 			}
 
 		} //END of Function[if(!stopGame)]
+		else
+		{
+			if (Keyboard::isKeyPressed(Keyboard::F9))
+			{
+				saveScoreFile(playerName, score);
+				goto menu_score;
+			}
+			else if (Keyboard::isKeyPressed(Keyboard::Escape))
+			{
+				window.close();
+			}
+			nameText.setString(playerName + "_");
+			nameText.setOrigin(Vector2f(nameText.getGlobalBounds().width, nameText.getGlobalBounds().height) / 2.f);
+			nameText.setPosition(nameTextPos);
+	
+		}
 		/*
 		*********************************************
 					   Draw the scene
@@ -705,6 +801,7 @@ int main()
 		{
 			window.draw(background2Sprite);
 			window.draw(messageText);
+			window.draw(nameText);
 			////Draw the RIPStone
 			//window.draw(RIPSprite);
 		}
@@ -713,6 +810,42 @@ int main()
 		// Show everything I just draw
 		window.display();
 
+	}
+
+menu_score:
+
+	readScoreFile();
+	for (int i = 0; i < TOPSCORE; i++)
+	{
+		scoreBoardText[i].setString(to_string(i + 1) + ". " +scoreData[i].name +"					"+ to_string(scoreData[i].score) + " p ");
+	}
+
+	while (window.isOpen())
+	{
+		Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::KeyPressed)
+			{
+				if (event.key.code == Keyboard::Escape)
+				{
+					window.close();
+				}
+				if (event.key.code == Keyboard::G)
+				{
+					goto Game;
+				}
+			}
+		}
+
+		window.clear();
+
+		window.draw(background3Sprite);
+		for (int i = 0; i < TOPSCORE; i++)
+		{
+			window.draw(scoreBoardText[i]);
+		}
+		window.display();
 	}
 
 	return 0;
@@ -744,4 +877,53 @@ void updateBranches(int seed)
 		branchPositions[0] = side::NONE;
 		break;
 	}
+}
+
+void sortScore()
+{
+	for (int i = 0; i < TOPSCORE; i++)
+	{
+		for (int j = i + 1; j < TOPSCORE + 1; j++)
+		{
+			if (scoreData[j].score > scoreData[i].score)
+			{
+				ScoreData temp = scoreData[i];
+				scoreData[i] = scoreData[j];
+				scoreData[j] = temp;
+			}
+		}
+	}
+}
+
+void readScoreFile()
+{
+	fstream scoreFile;
+	scoreFile.open(FILENAME, ios::app | ios::in);
+	for (int i = 0; i < TOPSCORE; i++)
+	{
+		string tempname;
+		string tempscore;
+		if (!getline(scoreFile, tempname))
+			return;
+		if (!getline(scoreFile, tempscore))
+			return;
+		scoreData[i].name = tempname;
+		scoreData[i].score = stoi(tempscore);
+	}
+	scoreFile.close();
+	sortScore();
+}
+
+void saveScoreFile(string name, int score)
+{
+	scoreData[TOPSCORE].name = name;
+	scoreData[TOPSCORE].score = score;
+	sortScore();
+	fstream scoreFile;
+	scoreFile.open(FILENAME, ios::out | ios::in);
+	for (int i = 0; i < TOPSCORE; i++)
+	{
+		scoreFile << scoreData[i].name << endl << scoreData[i].score << endl;
+	}
+	scoreFile.close();
 }
