@@ -60,7 +60,7 @@ int main()
 
 	//Texture
 	Texture background2Texture;
-	if (!background2Texture.loadFromFile("graphics/Forest1.jpg")) 
+	if (!background2Texture.loadFromFile("graphics/Forest5.jpg")) 
 	{
 		std::cout << "Load Failed";
 	}
@@ -256,7 +256,7 @@ int main()
 //++++++++++++ initialize menu_score ++++++++++++
 	//.....BG.....
 	Texture background3Texture;
-	if (!background3Texture.loadFromFile("graphics/Background4.jpg"))
+	if (!background3Texture.loadFromFile("graphics/Background5.jpg"))
 	{
 		std::cout << "Load Failed";
 	}
