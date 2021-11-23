@@ -1,0 +1,19 @@
+﻿  Timber.cpp
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(399,39): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(434,39): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(503,36): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(507,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(530,37): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(533,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(556,34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(559,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(582,33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(585,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(608,25): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(611,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(634,25): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(637,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(660,25): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(663,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\SFML_test1\Timber.cpp(690,18): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  SFML_test1.vcxproj -> D:\KMITL\year1\term1\midterm\programing fundamental\game\SFML_test1\x64\Debug\SFML_test1.exe

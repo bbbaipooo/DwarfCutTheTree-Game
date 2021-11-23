@@ -393,6 +393,7 @@ Game:
 				playerSide = side::RIGHT;
 
 				score++;
+				//score += 5;
 
 				// Add to the amount of time remaining
 				timeRemaining += (2 / score) + .15;
@@ -427,6 +428,7 @@ Game:
 				playerSide = side::LEFT;
 
 				score++;
+				//score += 5;
 
 				// Add to the amount of time remaining
 				timeRemaining += (2 / score) + .15;
@@ -676,7 +678,7 @@ Game:
 					jamActive3 = false;
 				}
 			}
-
+			
 			//Update score text to show on display
 			std::stringstream ss;
 			ss << "SCORE   " << score;
@@ -857,7 +859,6 @@ menu_score:
 		}
 		window.display();
 	}
-
 	return 0;
 
 }
